@@ -1,0 +1,27 @@
+# Sensitive files - DO NOT COMMIT
+config.py
+db_config.py
+*.pyc
+__pycache__/
+
+# Database backups
+*.sql.backup
+backup*.sql
+
+# Screenshots
+*_error.png
+screenshots/
+
+# Virtual environment
+venv/
+env/
+.env
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db

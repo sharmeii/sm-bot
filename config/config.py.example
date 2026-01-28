@@ -1,0 +1,67 @@
+# config.py.example
+# Copy this to config.py and fill in your actual values
+
+import requests
+
+# --- BITBROWSER SETTINGS ---
+API_URL = "http://127.0.0.1:54345"
+SHARED_ID = "YOUR_BITBROWSER_PROFILE_ID_HERE"
+
+# --- YOUTUBE SETTINGS ---
+YT_PROFILE_ID = SHARED_ID
+YT_VIDEO_PATH = ""
+YT_TITLE = ""
+YT_DESC = ""
+
+# --- LINKEDIN SETTINGS ---
+LI_PROFILE_ID = SHARED_ID
+LI_MEDIA_PATH = ""
+LI_CAPTION = ""
+
+# --- TIKTOK SETTINGS ---
+TT_PROFILE_ID = SHARED_ID
+TT_MEDIA_PATH = ""
+TT_CAPTION = ""
+
+# --- PINTEREST SETTINGS ---
+PIN_PROFILE_ID = SHARED_ID
+PIN_MEDIA_PATH = ""
+PIN_TITLE = ""
+PIN_DESCRIPTION = ""
+PIN_BOARD = "Cats"
+
+# --- TWITTER SETTINGS ---
+TWITTER_PROFILE_ID = SHARED_ID
+TWITTER_CAPTION = ""
+TWITTER_MEDIA_PATH = ""
+
+# --- COMMON UTILS ---
+def open_browser(profile_id):
+    """Common function to open any BitBrowser profile"""
+    try:
+        print(f"--- Opening Profile {profile_id} ---")
+        resp = requests.post(f"{API_URL}/browser/open", json={"id": profile_id}).json()
+        
+        if resp.get('success', False):
+            ws = resp['data']['ws']
+            if isinstance(ws, dict) and 'selenium' in ws:
+                return ws['selenium']
+            elif isinstance(ws, str):
+                return ws
+            else:
+                raise Exception(f"Unknown WS format: {ws}")
+        else:
+            msg = resp.get('msg', 'Unknown Error')
+            raise Exception(f"BitBrowser Failed: {msg}")
+            
+    except Exception as e:
+        print(f"Connection Error: {e}")
+        raise e 
+
+def close_browser(profile_id):
+    """Common function to close any BitBrowser profile"""
+    try:
+        requests.post(f"{API_URL}/browser/close", json={"id": profile_id})
+        print(f"--- Closed Profile {profile_id} ---")
+    except:
+        pass
